@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Install and configure Nginx on the remote server
+
+# Update package lists and install Nginx if not installed
+if ! [ -x "$(command -v nginx)" ]; then
+  apt-get update
+  apt-get install -y nginx
+fi
+
+# Configure Nginx
+echo "Hello World!" | sudo tee /var/www/html/index.html
+sudo sed -i "/server_name _;/a \    location /redirect_me {\n        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n    }" /etc/nginx/sites-available/default
+
+# Restart Nginx service
+service nginx restart
