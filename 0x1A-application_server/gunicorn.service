@@ -1,0 +1,17 @@
+# /etc/systemd/system/web_dynamic_2-hbnb.service
+# This systemd unit file manages the Gunicorn service for serving 2-hbnb content.
+
+[Unit]
+Description=Gunicorn instance to serve 2-hbnb
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/AirBnB_clone_v4/
+Environment=ERROR_LOGFILE=/tmp/airbnb-error.log
+Environment=ACCESS_LOGFILE=/tmp/airbnb-access.log
+ExecStart=gunicorn -b 0.0.0.0:5003 --workers 3 --error-logfile $ERROR_LOGFILE --access-logfile $ACCESS_LOGFILE web_dynamic.2-hbnb:app
+
+[Install]
+WantedBy=multi-user.target
