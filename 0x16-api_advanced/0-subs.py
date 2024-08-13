@@ -1,27 +1,26 @@
 #!/usr/bin/python3
 """
-0-sub.py
+Module for task 0
 """
-import requests
-
 
 def number_of_subscribers(subreddit):
     """
-    Returns the number of subscribers (not active users, total subscribers)
-    for a given subreddit
+    Queries the Reddit API and returns the number of subscribers to the subreddit
     """
-    url = f'https://www.reddit.com/r/{subreddit}/about.json'
-    headers = {"User-Agent": "Python/requests"}
-    response = requests.get(url, headers=headers, allow_redirects=False)
+    import requests
 
-    if response.status_code == 200:
-        try:
-            data = response.json()
-            result = data.get('data')
-            subscribers = result.get('subscribers')
-            return subscribers
+    url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
+    headers = {
+            "User-Agent": "python:subreddit.subscriber.counter:v1.0 (by /u/Mysterious-Fix-4680)"
+            }
 
-        except KeyError:
+    try:
+        sub_info = requests.get(url, headers, allow_redirects=False)
+        if sub_info.status_code == 200:
+            return sub_info.json().get("data", {}).get("subscribers", 0)
+        else:
+            print(f"Request failed with status code: {sub_info.status_code}")
             return 0
-    else:
+    except requests.RequestException as e:
+        print(f"An error occurred: {e}")
         return 0
